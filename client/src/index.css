@@ -164,10 +164,10 @@ h1 em { color: var(--electric-bright); font-style: normal; }
 .project-card:nth-child(6) { grid-column: span 8; grid-row: span 3; }
 .project-card:nth-child(7) { grid-column: span 4; grid-row: span 3; }
 .project-card:nth-child(8) { grid-column: span 8; grid-row: span 4; }
-.project-card img { width: 100%; height: 100%; object-fit: cover; display: block; filter: saturate(.72); transition: transform .6s var(--ease-out), filter .6s; }
+.project-card img, .project-card video { width: 100%; height: 100%; object-fit: cover; display: block; filter: saturate(.72); transition: transform .6s var(--ease-out), filter .6s; }
 .project-card.large img { object-position: center; }
 .project-card:nth-child(4) img, .project-card:nth-child(5) img { object-position: center; }
-.project-card:hover img { transform: scale(1.045); filter: saturate(1); }
+.project-card:hover img, .project-card:hover video { transform: scale(1.045); filter: saturate(1); }
 .project-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(7,9,13,.55), transparent 32%, rgba(7,9,13,.86)); opacity: .88; }
 .project-topline, .project-info { position: absolute; left: 22px; right: 22px; z-index: 1; display: flex; justify-content: space-between; }
 [dir="rtl"] .project-topline, [dir="rtl"] .project-info { left: 22px; right: 22px; }
@@ -201,6 +201,17 @@ h1 em { color: var(--electric-bright); font-style: normal; }
 .contact-layout { display: grid; grid-template-columns: 1.15fr .7fr; gap: 90px; align-items: end; }
 .contact-side { padding-bottom: 12px; max-width: 360px; }
 .contact-side > p { color: var(--muted-strong); font-size: 16px; line-height: 1.9; }
+.contact-form { display: flex; flex-direction: column; gap: 10px; margin-top: 25px; }
+.contact-form input:not(.honeypot), .contact-form textarea { width: 100%; border: 1px solid var(--line); border-radius: 2px; outline: 0; background: rgba(255,255,255,.035); color: var(--foreground); padding: 12px 13px; font: 12px var(--body); transition: border-color .2s, background .2s; resize: vertical; }
+.contact-form input:not(.honeypot)::placeholder, .contact-form textarea::placeholder { color: var(--muted); }
+.contact-form input:not(.honeypot):focus, .contact-form textarea:focus { border-color: var(--electric); background: rgba(114,167,255,.06); }
+.honeypot { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+.contact-form .contact-button { align-self: flex-start; margin-top: 3px; }
+.contact-form .contact-button:disabled { cursor: wait; opacity: .7; }
+.form-feedback { font: 10px/1.6 var(--mono); }
+.form-feedback.success { color: var(--lime); }
+.form-feedback.error { color: #ff9a9a; }
+.form-feedback a { text-decoration: underline; }
 .contact-button { display: inline-flex; align-items: center; gap: 13px; margin-top: 30px; color: var(--ink); background: var(--lime); padding: 16px 20px; font-size: 12px; transition: transform .18s var(--ease-out), background .18s; }
 .contact-button:hover { background: #d9fc89; transform: translateY(-2px); }
 .contact-availability { display: block; margin-top: 28px; color: var(--muted); font: 10px/1.6 var(--mono); }
@@ -217,6 +228,7 @@ h1 em { color: var(--electric-bright); font-style: normal; }
 .project-modal { position: fixed; inset: 0; z-index: 30; background: rgba(3,4,6,.86); backdrop-filter: blur(16px); display: grid; place-items: center; padding: 30px; animation: fade-in .25s var(--ease-out); }
 .modal-inner { position: relative; width: min(900px, 100%); max-height: 90vh; display: grid; grid-template-columns: 1.3fr .7fr; background: var(--panel); border: 1px solid var(--line-bright); animation: modal-in .4s var(--ease-out); overflow: auto; }
 .modal-inner img { width: 100%; height: 100%; max-height: 72vh; min-height: 340px; object-fit: cover; }
+.modal-inner video { width: 100%; height: 100%; max-height: 72vh; min-height: 340px; object-fit: cover; background: #05070a; }
 .modal-copy { padding: 45px 32px; display: flex; flex-direction: column; justify-content: end; }
 .modal-copy > span { color: var(--lime); font: 10px var(--mono); }
 .modal-copy h2 { margin: 12px 0; font: 500 37px/.95 var(--display); letter-spacing: -.06em; }

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
+import { useEffect, useMemo, useRef, useState, type CSSProperties, type FormEvent } from "react";
 import {
   ArrowDownLeft,
   ArrowUpRight,
@@ -28,7 +28,19 @@ import {
 const ASSET = "/manus-storage/";
 
 type Lang = "ar" | "en";
-type Category = "all" | "ads" | "avatars" | "visuals" | "presentations";
+type Category = "all" | "ads" | "avatars" | "visuals" | "presentations" | "webgames";
+
+type Project = {
+  id: number;
+  category: Category;
+  image: string;
+  tag: string;
+  title: { ar: string; en: string };
+  desc: { ar: string; en: string };
+  size: string;
+  video?: string;
+  link?: string;
+};
 
 type Copy = {
   nav: { about: string; work: string; approach: string; contact: string };
@@ -46,6 +58,7 @@ type Copy = {
   work: { kicker: string; title: string; body: string; filters: Record<Category, string>; open: string; close: string };
   approach: { kicker: string; title: string; body: string; steps: { no: string; title: string; body: string }[] };
   contact: { kicker: string; title: string; body: string; cta: string; availability: string };
+  form: { name: string; email: string; message: string; submit: string; sending: string; success: string; error: string };
   footer: string;
 };
 
@@ -73,7 +86,7 @@ const content: Record<Lang, Copy> = {
       kicker: "02 / مختبر الأعمال",
       title: "أفكار تتحول\nإلى حضور.",
       body: "مختارات من الإعلانات، الأنظمة الذكية، والتصاميم المفاهيمية التي تشكل لغتي البصرية.",
-      filters: { all: "الكل", ads: "الإعلانات", avatars: "الأفتار", visuals: "الصور", presentations: "العروض التقديمية" },
+      filters: { all: "الكل", ads: "الإعلانات", avatars: "الأفتار", visuals: "الصور", presentations: "العروض التقديمية", webgames: "المواقع والألعاب" },
       open: "فتح المشروع",
       close: "إغلاق",
     },
@@ -94,6 +107,7 @@ const content: Record<Lang, Copy> = {
       cta: "راسلني الآن",
       availability: "متاح حالياً لمشاريع التصميم التوليدي والابتكار البصري.",
     },
+    form: { name: "الاسم", email: "البريد الإلكتروني", message: "أخبرني عن فكرتك", submit: "إرسال الرسالة", sending: "جارٍ الإرسال…", success: "تم الإرسال — سأعود إليك قريباً.", error: "تعذّر الإرسال. استخدم البريد المباشر أدناه." },
     footer: "تامر مستريحي — هندسة الخيال، بدقة.",
   },
   en: {
@@ -119,7 +133,7 @@ const content: Record<Lang, Copy> = {
       kicker: "02 / The work lab",
       title: "Ideas become\npresence.",
       body: "A selection of generated campaigns, smart systems, and concept visuals that form my visual language.",
-      filters: { all: "All work", ads: "Ads", avatars: "Avatars", visuals: "Images", presentations: "Presentations" },
+      filters: { all: "All work", ads: "Ads", avatars: "Avatars", visuals: "Images", presentations: "Presentations", webgames: "Websites + games" },
       open: "Open project",
       close: "Close",
     },
@@ -140,11 +154,12 @@ const content: Record<Lang, Copy> = {
       cta: "Email me now",
       availability: "Currently available for generative design and visual innovation projects.",
     },
+    form: { name: "Your name", email: "Email address", message: "Tell me about the idea", submit: "Send message", sending: "Sending…", success: "Sent — I’ll get back to you soon.", error: "Could not send. Use the direct email below." },
     footer: "Tamer Mistareehi — engineering imagination, precisely.",
   },
 };
 
-const projects = [
+const projects: Project[] = [
   { id: 1, category: "ads" as Category, image: `${ASSET}smart-lockers_3e5ea0cd.jpg`, tag: "AD / 01", title: { ar: "خزائن ذكية", en: "Smart Lockers" }, desc: { ar: "حملة بصرية لمنتج تقني داخل تجربة التسوق.", en: "A visual campaign for a smart product inside the retail experience." }, size: "large" },
   { id: 2, category: "visuals" as Category, image: `${ASSET}smart-mirror_12ee6def.jpg`, tag: "IMAGE / 02", title: { ar: "مرآة تفهمك", en: "A Mirror That Understands" }, desc: { ar: "تصور لواجهة صحية هادئة في أكثر الأماكن إنسانية.", en: "A concept for a calm health interface in the most human of spaces." }, size: "wide" },
   { id: 3, category: "visuals" as Category, image: `${ASSET}smart-bag_1f581587.jpg`, tag: "IMAGE / 03", title: { ar: "الحقيبة الذكية", en: "The Smart Backpack" }, desc: { ar: "ذكاء صغير يخفف ضوضاء اليوم الدراسي.", en: "Small intelligence that makes the school day feel lighter." }, size: "square" },
@@ -154,6 +169,10 @@ const projects = [
   { id: 7, category: "visuals" as Category, image: `${ASSET}design-arena_fa179f7d.png`, tag: "IDENTITY / 07", title: { ar: "ساحة التصميم", en: "Design Arena" }, desc: { ar: "هوية مرنة لمجتمع يتعلم ويصنع معاً.", en: "A flexible identity for a community that learns and makes together." }, size: "square" },
   { id: 8, category: "presentations" as Category, image: `${ASSET}project-collection-3_ad09aef0.png`, tag: "PRESENTATION / 08", title: { ar: "سرد بصري", en: "Visual Narrative" }, desc: { ar: "بناء قصة من الصور والمعلومة والإيقاع.", en: "Building a story from image, information, and rhythm." }, size: "wide" },
   { id: 9, category: "avatars" as Category, image: `${ASSET}portrait_0cb3dd6a.jpg`, tag: "AVATAR / 09", title: { ar: "هوية تامر", en: "Tamer’s Avatar" }, desc: { ar: "صورة شخصية داخل عالم الذكاء الاصطناعي.", en: "A personal portrait inside an AI environment." }, size: "square" },
+  { id: 10, category: "avatars" as Category, image: `${ASSET}cloud-birds-game_21a373fd.png`, video: `${ASSET}avatar-cloud-birds_b103b2a0.mp4`, tag: "AVATAR / 10", title: { ar: "صائد عصافير الغيوم", en: "Cloud Birds Hunter" }, desc: { ar: "فيديو أفتار من لعبة متاهات تفاعلية.", en: "An avatar reel from an interactive maze game." }, size: "wide", link: "https://zuhairtamer-ctrl.github.io/tamerbirdgame2/" },
+  { id: 11, category: "avatars" as Category, image: `${ASSET}ramtha-site_ac8b3003.png`, video: `${ASSET}avatar-ramtha_3e6f5d56.mp4`, tag: "AVATAR / 11", title: { ar: "معهد الرمثا", en: "Ramtha Institute" }, desc: { ar: "فيديو أفتار من تجربة موقع تدريب تفاعلية.", en: "An avatar reel from an interactive training website." }, size: "large", link: "https://zuhairtamer-ctrl.github.io/tamerramtha8/" },
+  { id: 12, category: "webgames" as Category, image: `${ASSET}ramtha-site_ac8b3003.png`, tag: "WEB / 12", title: { ar: "معهد تدريب مهني الرمثا", en: "Ramtha Vocational Institute" }, desc: { ar: "موقع تفاعلي بهوية ذهبية للاحتفال باليوبيل الذهبي.", en: "An interactive golden identity for a 50-year anniversary." }, size: "large", link: "https://zuhairtamer-ctrl.github.io/tamerramtha8/" },
+  { id: 13, category: "webgames" as Category, image: `${ASSET}cloud-birds-game_21a373fd.png`, tag: "GAME / 13", title: { ar: "لعبة صائد عصافير الغيوم", en: "Cloud Birds Hunter Game" }, desc: { ar: "لعبة متصفح بمتاهات مولّدة، كوينز، وعصافير غيمية.", en: "A browser game with generated mazes, coins, and cloud birds." }, size: "wide", link: "https://zuhairtamer-ctrl.github.io/tamerbirdgame2/" },
 ];
 
 function splitTitle(value: string) {
@@ -167,6 +186,7 @@ export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [soundOn, setSoundOn] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [formStatus, setFormStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
   const audioRef = useRef<HTMLAudioElement>(null);
   const t = content[lang];
   const dir = lang === "ar" ? "rtl" : "ltr";
@@ -199,6 +219,24 @@ export default function Home() {
     setMenuOpen(false);
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   };
+
+  async function handleContactSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setFormStatus("sending");
+    const form = event.currentTarget;
+    const data = new FormData(form);
+    data.append("_subject", `TM/AI portfolio — ${String(data.get("name") || "New message")}`);
+    data.append("_captcha", "false");
+    data.append("_template", "table");
+    try {
+      const response = await fetch("https://formsubmit.co/ajax/zuhairtamer@outlook.com", { method: "POST", headers: { Accept: "application/json" }, body: data });
+      if (!response.ok) throw new Error("Unable to send");
+      form.reset();
+      setFormStatus("success");
+    } catch {
+      setFormStatus("error");
+    }
+  }
 
   return (
     <main className="site-shell" dir={dir}>
@@ -297,8 +335,8 @@ export default function Home() {
             {(Object.keys(t.work.filters) as Category[]).map((key) => <button key={key} className={category === key ? "filter active" : "filter"} onClick={() => setCategory(key)} role="tab" aria-selected={category === key}>{t.work.filters[key]}</button>)}
           </div>
           <div className="project-grid">
-            {filteredProjects.map((project, index) => <button className={`project-card ${project.size}`} key={project.id} onClick={() => setSelected(project)} style={{ "--delay": `${index * 55}ms` } as CSSProperties}>
-              <img src={project.image} alt={project.title[lang]} />
+            {filteredProjects.map((project, index) => <button className={`project-card ${project.size} ${project.video ? "has-video" : ""}`} key={project.id} onClick={() => setSelected(project)} style={{ "--delay": `${index * 55}ms` } as CSSProperties}>
+              {project.video ? <video src={project.video} poster={project.image} muted autoPlay loop playsInline aria-label={project.title[lang]} /> : <img src={project.image} alt={project.title[lang]} />}
               <div className="project-overlay" />
               <div className="project-topline"><span>{project.tag}</span><span className="project-arrow"><ArrowUpRight size={17} /></span></div>
               <div className="project-info"><span className="project-category">{t.work.filters[project.category]}</span><h3>{project.title[lang]}</h3><p>{project.desc[lang]}</p></div>
@@ -320,14 +358,22 @@ export default function Home() {
         <div className="contact-glow" aria-hidden="true" />
         <div className="page-width contact-layout">
           <div><div className="section-kicker"><span>{t.contact.kicker}</span><span className="kicker-rule" /></div><h2 className="display-title">{splitTitle(t.contact.title)}</h2></div>
-          <div className="contact-side"><p>{t.contact.body}</p><a className="contact-button" href="mailto:zuhairtamer@outlook.com">{t.contact.cta}<Mail size={17} /></a><span className="contact-availability">{t.contact.availability}</span></div>
+          <div className="contact-side"><p>{t.contact.body}</p><form className="contact-form" onSubmit={handleContactSubmit}>
+            <input type="text" name="name" required placeholder={t.form.name} />
+            <input type="email" name="email" required placeholder={t.form.email} />
+            <textarea name="message" required placeholder={t.form.message} rows={3} />
+            <input type="text" name="_honey" tabIndex={-1} autoComplete="off" className="honeypot" aria-hidden="true" />
+            <button className="contact-button" type="submit" disabled={formStatus === "sending"}>{formStatus === "sending" ? t.form.sending : t.form.submit}<Mail size={17} /></button>
+            {formStatus === "success" && <span className="form-feedback success">{t.form.success}</span>}
+            {formStatus === "error" && <span className="form-feedback error">{t.form.error} <a href="mailto:zuhairtamer@outlook.com">zuhairtamer@outlook.com</a></span>}
+          </form><span className="contact-availability">{t.contact.availability}</span></div>
         </div>
         <div className="contact-watermark" aria-hidden="true">TM<span>/</span>AI</div>
       </section>
 
-      <footer className="footer page-width"><span>{t.footer}</span><div className="footer-links"><a href="mailto:zuhairtamer@outlook.com"><Mail size={15} /> Email</a><a href="tel:+962776952526"><Phone size={15} /> +962 7 7695 2526</a><a href="https://www.linkedin.com" target="_blank" rel="noreferrer"><Linkedin size={15} /> LinkedIn</a><a href="https://github.com" target="_blank" rel="noreferrer"><Github size={15} /> GitHub</a></div><span>AMMAN / JORDAN</span></footer>
+      <footer className="footer page-width"><span>{t.footer}</span><div className="footer-links"><a href="mailto:zuhairtamer@outlook.com"><Mail size={15} /> Email</a><a href="tel:+962776952526"><Phone size={15} /> +962 7 7695 2526</a><a href="https://jo.linkedin.com/in/tamer-zuhair-88a551177" target="_blank" rel="noreferrer"><Linkedin size={15} /> LinkedIn</a><a href="https://github.com/zuhairtamer-ctrl" target="_blank" rel="noreferrer"><Github size={15} /> GitHub</a></div><span>AMMAN / JORDAN</span></footer>
 
-      {selected && <div className="project-modal" role="dialog" aria-modal="true" aria-label={selected.title[lang]} onClick={() => setSelected(null)}><div className="modal-inner" onClick={(event) => event.stopPropagation()}><button className="modal-close" onClick={() => setSelected(null)} aria-label={t.work.close}><X size={20} /></button><img src={selected.image} alt={selected.title[lang]} /><div className="modal-copy"><span>{selected.tag}</span><h2>{selected.title[lang]}</h2><p>{selected.desc[lang]}</p><a href="mailto:zuhairtamer@outlook.com">{t.contact.cta}<ArrowUpRight size={16} /></a></div></div></div>}
+      {selected && <div className="project-modal" role="dialog" aria-modal="true" aria-label={selected.title[lang]} onClick={() => setSelected(null)}><div className="modal-inner" onClick={(event) => event.stopPropagation()}><button className="modal-close" onClick={() => setSelected(null)} aria-label={t.work.close}><X size={20} /></button>{selected.video ? <video src={selected.video} poster={selected.image} controls playsInline /> : <img src={selected.image} alt={selected.title[lang]} />}<div className="modal-copy"><span>{selected.tag}</span><h2>{selected.title[lang]}</h2><p>{selected.desc[lang]}</p><a href={selected.link || "mailto:zuhairtamer@outlook.com"} target={selected.link ? "_blank" : undefined} rel={selected.link ? "noreferrer" : undefined}>{selected.link ? (lang === "ar" ? "فتح المشروع" : "Open live project") : t.contact.cta}<ExternalLink size={16} /></a></div></div></div>}
     </main>
   );
 }
