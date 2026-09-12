@@ -16,6 +16,10 @@ function Router() {
       <Route path="/tamer987/" component={Home} />
       <Route path="/tamer987/index.html" component={Home} />
       <Route path="/tamer987/dashboard.html" component={Home} />
+      <Route path="/generative-ai-portfolio/" component={Home} />
+      <Route path="/generative-ai-portfolio/index.html" component={Home} />
+      <Route path="/generative-ai-portfolio/docs/" component={Home} />
+      <Route path="/generative-ai-portfolio/docs/index.html" component={Home} />
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>
