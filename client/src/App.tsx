@@ -6,20 +6,35 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
 
+const homeRoutes = [
+  "/",
+  "/index.html",
+  "/world",
+  "/portfolio",
+  "/sound",
+  "/contact",
+  "/tzsm1987/",
+  "/tzsm1987/index.html",
+  "/tzsm1987/dashboard.html",
+  "/tamer987/",
+  "/tamer987/index.html",
+  "/tamer987/dashboard.html",
+  "/generative-ai-portfolio/",
+  "/generative-ai-portfolio/index.html",
+  "/generative-ai-portfolio/docs/",
+  "/generative-ai-portfolio/docs/index.html",
+  "/tamerarena/",
+  "/tamerarena/index.html",
+  "/tamerarena/docs/",
+  "/tamerarena/docs/index.html",
+];
+
 function Router() {
   return (
     <Switch>
-      <Route path="/" component={Home} />
-      <Route path="/tzsm1987/" component={Home} />
-      <Route path="/tzsm1987/index.html" component={Home} />
-      <Route path="/tzsm1987/dashboard.html" component={Home} />
-      <Route path="/tamer987/" component={Home} />
-      <Route path="/tamer987/index.html" component={Home} />
-      <Route path="/tamer987/dashboard.html" component={Home} />
-      <Route path="/generative-ai-portfolio/" component={Home} />
-      <Route path="/generative-ai-portfolio/index.html" component={Home} />
-      <Route path="/generative-ai-portfolio/docs/" component={Home} />
-      <Route path="/generative-ai-portfolio/docs/index.html" component={Home} />
+      {homeRoutes.map((path) => (
+        <Route key={path} path={path} component={Home} />
+      ))}
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>

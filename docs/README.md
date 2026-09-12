@@ -1,5 +1,5 @@
-# TM/AI Lab — GitHub Pages
+# Galaxy AI Portfolio — GitHub Pages
 
-Bilingual Arabic-English portfolio for Tamer Mistareehi, Telecommunications Engineer and Generative AI Designer.
+Bilingual Arabic-English galaxy portfolio for Tamer Mistareehi with interactive diamonds, visual subpages, and opt-in sound effects.
 
-Live site: https://tamermistareehi-ui.github.io/tamerproject87/
+Live site: https://tamermistareehi-ui.github.io/tamerarena/
