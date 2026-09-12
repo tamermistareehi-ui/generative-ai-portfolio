@@ -28,7 +28,7 @@ import {
 const ASSET = "/manus-storage/";
 
 type Lang = "ar" | "en";
-type Category = "all" | "ads" | "avatars" | "visuals" | "presentations" | "webgames";
+type Category = "all" | "ads" | "avatars" | "visuals" | "presentations" | "webgames" | "audio";
 
 type Project = {
   id: number;
@@ -39,6 +39,7 @@ type Project = {
   desc: { ar: string; en: string };
   size: string;
   video?: string;
+  audio?: string;
   link?: string;
 };
 
@@ -86,7 +87,7 @@ const content: Record<Lang, Copy> = {
       kicker: "02 / مختبر الأعمال",
       title: "أفكار تتحول\nإلى حضور.",
       body: "مختارات من الإعلانات، الأنظمة الذكية، والتصاميم المفاهيمية التي تشكل لغتي البصرية.",
-      filters: { all: "الكل", ads: "الإعلانات", avatars: "الأفتار", visuals: "الصور", presentations: "العروض التقديمية", webgames: "المواقع والألعاب" },
+      filters: { all: "الكل", ads: "الإعلانات", avatars: "الأفتار", visuals: "الصور", presentations: "العروض التقديمية", webgames: "المواقع والألعاب", audio: "الصوتيات" },
       open: "فتح المشروع",
       close: "إغلاق",
     },
@@ -133,7 +134,7 @@ const content: Record<Lang, Copy> = {
       kicker: "02 / The work lab",
       title: "Ideas become\npresence.",
       body: "A selection of generated campaigns, smart systems, and concept visuals that form my visual language.",
-      filters: { all: "All work", ads: "Ads", avatars: "Avatars", visuals: "Images", presentations: "Presentations", webgames: "Websites + games" },
+      filters: { all: "All work", ads: "Ads", avatars: "Avatars", visuals: "Images", presentations: "Presentations", webgames: "Websites + games", audio: "Audio" },
       open: "Open project",
       close: "Close",
     },
@@ -181,6 +182,17 @@ const projects: Project[] = [
   { id: 19, category: "presentations" as Category, image: `${ASSET}slide-01_3734b2e2.png`, tag: "DECK / 19", title: { ar: "أدوات الابتكار والإبداع", en: "Tools for Innovation + Creativity" }, desc: { ar: "الغلاف الأول لعرض الذكاء الاصطناعي — أدوات الابتكار والإبداع.", en: "The opening slide of the AI innovation and creativity deck." }, size: "large" },
   { id: 20, category: "presentations" as Category, image: `${ASSET}slide-02_469d528e.png`, tag: "DECK / 20", title: { ar: "من الفكرة إلى الأداة", en: "From Idea to Tool" }, desc: { ar: "شريحة من العرض التقديمي المستخرج من Drive.", en: "A slide from the presentation deck extracted from Drive." }, size: "square" },
   { id: 21, category: "presentations" as Category, image: `${ASSET}slide-03_b8aacccc.png`, tag: "DECK / 21", title: { ar: "صناعة الأثر", en: "Designing Impact" }, desc: { ar: "جزء من سرد العرض حول الذكاء الاصطناعي والإبداع.", en: "Part of the deck’s story about AI and creativity." }, size: "wide" },
+  { id: 22, category: "visuals" as Category, image: `${ASSET}drive-image-01_d3f5db29.jpeg`, tag: "IMAGE / 22", title: { ar: "صائد الغيوم", en: "Cloud Hunter" }, desc: { ar: "مشهد بصري من أرشيف التجارب التوليدية.", en: "A visual scene from the generative experiments archive." }, size: "wide" },
+  { id: 23, category: "visuals" as Category, image: `${ASSET}drive-image-02_500e7ae6.jpeg`, tag: "IMAGE / 23", title: { ar: "صائد الغيوم — لقطة ثانية", en: "Cloud Hunter — Frame Two" }, desc: { ar: "لقطة إضافية من عالم صائد الغيوم.", en: "An additional frame from the Cloud Hunter world." }, size: "square" },
+  { id: 24, category: "visuals" as Category, image: `${ASSET}drive-image-03_929441dd.jpeg`, tag: "IMAGE / 24", title: { ar: "رحلة بصرية", en: "A Visual Journey" }, desc: { ar: "صورة مفاهيمية من مجموعة الأعمال الجديدة.", en: "A conceptual image from the new work collection." }, size: "tall" },
+  { id: 25, category: "visuals" as Category, image: `${ASSET}drive-image-04_21352f5a.jpeg`, tag: "IMAGE / 25", title: { ar: "إطار تجريبي", en: "Experimental Frame" }, desc: { ar: "تجربة بصرية تجمع الشخصية والبيئة.", en: "A visual experiment blending character and environment." }, size: "square" },
+  { id: 26, category: "visuals" as Category, image: `${ASSET}drive-image-05_a9693e07.jpeg`, tag: "IMAGE / 26", title: { ar: "عودة إلى المدينة", en: "Return to the City" }, desc: { ar: "مشهد سردي من أرشيف الصور الجديدة.", en: "A narrative scene from the new image archive." }, size: "large" },
+  { id: 27, category: "visuals" as Category, image: `${ASSET}drive-image-06_91a1579b.jpeg`, tag: "IMAGE / 27", title: { ar: "على الطريق", en: "On the Road" }, desc: { ar: "تكوين بصري عن الحركة والرحلة.", en: "A visual composition about movement and journey." }, size: "wide" },
+  { id: 28, category: "visuals" as Category, image: `${ASSET}drive-image-07_69faf88d.jpeg`, tag: "IMAGE / 28", title: { ar: "مسيرة في الصحراء", en: "March Across the Desert" }, desc: { ar: "مشهد ملحمي مولّد بالذكاء الاصطناعي.", en: "An AI-generated epic desert scene." }, size: "tall" },
+  { id: 29, category: "visuals" as Category, image: `${ASSET}drive-image-08_99344b2d.jpeg`, tag: "IMAGE / 29", title: { ar: "حروف الفرسان", en: "Knights in Arabic Letterform" }, desc: { ar: "تجربة تجمع الحروف العربية والهوية البصرية.", en: "An experiment combining Arabic lettering and visual identity." }, size: "square" },
+  { id: 30, category: "visuals" as Category, image: `${ASSET}drive-image-09_34ff04e6.png`, tag: "IMAGE / 30", title: { ar: "تامر — بورتريه جديد", en: "Tamer — New Portrait" }, desc: { ar: "بورتريه من مجموعة الصور الجديدة.", en: "A portrait from the new image collection." }, size: "large" },
+  { id: 31, category: "visuals" as Category, image: `${ASSET}drive-image-10_5f3131e9.png`, tag: "IMAGE / 31", title: { ar: "ساحة التصميم — إصدار جديد", en: "Design Arena — New Edition" }, desc: { ar: "تطوير جديد لهوية ساحة التصميم.", en: "A new evolution of the Design Arena identity." }, size: "wide" },
+  { id: 32, category: "audio" as Category, image: `${ASSET}drive-image-01_d3f5db29.jpeg`, audio: `${ASSET}dragon-cloud-guardian_9a6d2872.mp3`, tag: "AUDIO / 32", title: { ar: "حارس سحاب التنانين", en: "Dragon Cloud Guardian" }, desc: { ar: "مقطوعة صوتية من مجلد الصوتيات الجديد.", en: "An audio piece from the new sound archive." }, size: "large" },
 ];
 
 function splitTitle(value: string) {
@@ -232,12 +244,13 @@ export default function Home() {
     event.preventDefault();
     setFormStatus("sending");
     const form = event.currentTarget;
-    const data = new FormData(form);
-    data.append("_subject", `TM/AI portfolio — ${String(data.get("name") || "New message")}`);
-    data.append("_captcha", "false");
+      const data = new FormData(form);
+      data.append("_subject", `TM/AI portfolio — ${String(data.get("name") || "New message")}`);
+      data.append("_replyto", String(data.get("email") || ""));
+      data.append("_captcha", "false");
     data.append("_template", "table");
     try {
-      const response = await fetch("https://formsubmit.co/ajax/zuhairtamer@outlook.com", { method: "POST", headers: { Accept: "application/json" }, body: data });
+      const response = await fetch("https://formsubmit.co/ajax/tamermistareehi@gmail.com", { method: "POST", headers: { Accept: "application/json" }, body: data });
       if (!response.ok) throw new Error("Unable to send");
       form.reset();
       setFormStatus("success");
@@ -342,9 +355,11 @@ export default function Home() {
           <div className="filter-row" role="tablist" aria-label="Project categories">
             {(Object.keys(t.work.filters) as Category[]).map((key) => <button key={key} className={category === key ? "filter active" : "filter"} onClick={() => setCategory(key)} role="tab" aria-selected={category === key}>{t.work.filters[key]}</button>)}
           </div>
-          <div className="project-grid">
+          <div className="album-strip"><span>STUDIO ARCHIVE / 2026</span><span>{lang === "ar" ? "ألبوم بصري — اضغط على أي عمل لعرضه كاملاً" : "Visual album — open any piece to view it in full"}</span><span>{String(filteredProjects.length).padStart(2, "0")} {lang === "ar" ? "أعمال" : "pieces"}</span></div>
+          <div className="project-grid album-grid">
             {filteredProjects.map((project, index) => <button className={`project-card ${project.size} ${project.video ? "has-video" : ""}`} key={project.id} onClick={() => setSelected(project)} style={{ "--delay": `${index * 55}ms` } as CSSProperties}>
               {project.video ? <video src={project.video} poster={project.image} muted autoPlay loop playsInline aria-label={project.title[lang]} /> : <img src={project.image} alt={project.title[lang]} />}
+              {project.audio && <div className="project-audio-control" onClick={(event) => event.stopPropagation()} onPointerDown={(event) => event.stopPropagation()}><AudioLines size={18} /><audio src={project.audio} controls preload="metadata" aria-label={project.title[lang]} /></div>}
               <div className="project-overlay" />
               <div className="project-topline"><span>{project.tag}</span><span className="project-arrow"><ArrowUpRight size={17} /></span></div>
               <div className="project-info"><span className="project-category">{t.work.filters[project.category]}</span><h3>{project.title[lang]}</h3><p>{project.desc[lang]}</p></div>
@@ -373,15 +388,15 @@ export default function Home() {
             <input type="text" name="_honey" tabIndex={-1} autoComplete="off" className="honeypot" aria-hidden="true" />
             <button className="contact-button" type="submit" disabled={formStatus === "sending"}>{formStatus === "sending" ? t.form.sending : t.form.submit}<Mail size={17} /></button>
             {formStatus === "success" && <span className="form-feedback success">{t.form.success}</span>}
-            {formStatus === "error" && <span className="form-feedback error">{t.form.error} <a href="mailto:zuhairtamer@outlook.com">zuhairtamer@outlook.com</a></span>}
+            {formStatus === "error" && <span className="form-feedback error">{t.form.error} <a href="mailto:tamermistareehi@gmail.com">tamermistareehi@gmail.com</a></span>}
           </form><span className="contact-availability">{t.contact.availability}</span></div>
         </div>
         <div className="contact-watermark" aria-hidden="true">TM<span>/</span>AI</div>
       </section>
 
-      <footer className="footer page-width"><span>{t.footer}</span><div className="footer-links"><a href="mailto:zuhairtamer@outlook.com"><Mail size={15} /> Email</a><a href="tel:+962776952526"><Phone size={15} /> 00962776952526</a><a href="https://jo.linkedin.com/in/tamer-zuhair-88a551177" target="_blank" rel="noreferrer"><Linkedin size={15} /> LinkedIn</a><a href="https://github.com/zuhairtamer-ctrl" target="_blank" rel="noreferrer"><Github size={15} /> GitHub</a></div><span>AMMAN / JORDAN</span></footer>
+      <footer className="footer page-width"><span>{t.footer}</span><div className="footer-links"><a href="mailto:tamermistareehi@gmail.com"><Mail size={15} /> Email</a><a href="tel:+962776952526"><Phone size={15} /> 00962776952526</a><a href="https://jo.linkedin.com/in/tamer-zuhair-88a551177" target="_blank" rel="noreferrer"><Linkedin size={15} /> LinkedIn</a><a href="https://github.com/zuhairtamer-ctrl" target="_blank" rel="noreferrer"><Github size={15} /> GitHub</a></div><span>AMMAN / JORDAN</span></footer>
 
-      {selected && <div className="project-modal" role="dialog" aria-modal="true" aria-label={selected.title[lang]} onClick={() => setSelected(null)}><div className="modal-inner" onClick={(event) => event.stopPropagation()}><button className="modal-close" onClick={() => setSelected(null)} aria-label={t.work.close}><X size={20} /></button>{selected.video ? <video src={selected.video} poster={selected.image} controls playsInline /> : <img src={selected.image} alt={selected.title[lang]} />}<div className="modal-copy"><span>{selected.tag}</span><h2>{selected.title[lang]}</h2><p>{selected.desc[lang]}</p><a href={selected.link || "mailto:zuhairtamer@outlook.com"} target={selected.link ? "_blank" : undefined} rel={selected.link ? "noreferrer" : undefined}>{selected.link ? (lang === "ar" ? "فتح المشروع" : "Open live project") : t.contact.cta}<ExternalLink size={16} /></a></div></div></div>}
+      {selected && <div className="project-modal" role="dialog" aria-modal="true" aria-label={selected.title[lang]} onClick={() => setSelected(null)}><div className="modal-inner" onClick={(event) => event.stopPropagation()}><button className="modal-close" onClick={() => setSelected(null)} aria-label={t.work.close}><X size={20} /></button>{selected.video ? <video src={selected.video} poster={selected.image} controls playsInline /> : selected.audio ? <div className="modal-audio"><img src={selected.image} alt={selected.title[lang]} /><audio src={selected.audio} controls autoPlay /></div> : <img src={selected.image} alt={selected.title[lang]} />}<div className="modal-copy"><span>{selected.tag}</span><h2>{selected.title[lang]}</h2><p>{selected.desc[lang]}</p><a href={selected.link || "mailto:tamermistareehi@gmail.com"} target={selected.link ? "_blank" : undefined} rel={selected.link ? "noreferrer" : undefined}>{selected.link ? (lang === "ar" ? "فتح المشروع" : "Open live project") : t.contact.cta}<ExternalLink size={16} /></a></div></div></div>}
     </main>
   );
 }
