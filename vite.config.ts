@@ -203,9 +203,55 @@ function vitePluginStorageProxy(): Plugin {
   };
 }
 
-const plugins = [react(), tailwindcss(), jsxLocPlugin(), vitePluginManusRuntime(), vitePluginManusDebugCollector(), vitePluginStorageProxy()];
+
+function vitePluginDocsAssetProxy(): Plugin {
+  const docsAssetDir = path.join(PROJECT_ROOT, "docs", "assets");
+  const mimeTypes: Record<string, string> = {
+    ".css": "text/css; charset=utf-8",
+    ".js": "text/javascript; charset=utf-8",
+    ".jpg": "image/jpeg",
+    ".jpeg": "image/jpeg",
+    ".png": "image/png",
+    ".mp3": "audio/mpeg",
+    ".mp4": "video/mp4",
+    ".pptx": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+  };
+
+  return {
+    name: "docs-asset-proxy",
+    configureServer(server: ViteDevServer) {
+      server.middlewares.use("/assets", (req, res, next) => {
+        if (!req.url) return next();
+
+        const requestPath = decodeURIComponent(req.url.split("?")[0].replace(/^\/+/, ""));
+        const assetPath = path.resolve(docsAssetDir, requestPath);
+        const allowedRoot = `${docsAssetDir}${path.sep}`;
+
+        if (!assetPath.startsWith(allowedRoot)) {
+          res.writeHead(403, { "Content-Type": "text/plain" });
+          res.end("Forbidden");
+          return;
+        }
+
+        if (!fs.existsSync(assetPath) || !fs.statSync(assetPath).isFile()) {
+          return next();
+        }
+
+        const ext = path.extname(assetPath).toLowerCase();
+        res.writeHead(200, {
+          "Content-Type": mimeTypes[ext] ?? "application/octet-stream",
+          "Cache-Control": "no-cache",
+        });
+        fs.createReadStream(assetPath).pipe(res);
+      });
+    },
+  };
+}
+
+const plugins = [react(), tailwindcss(), jsxLocPlugin(), vitePluginManusRuntime(), vitePluginManusDebugCollector(), vitePluginStorageProxy(), vitePluginDocsAssetProxy()];
 
 export default defineConfig({
+  base: "./",
   plugins,
   resolve: {
     alias: {
@@ -230,6 +276,7 @@ export default defineConfig({
       ".manus-asia.computer",
       ".manuscomputer.ai",
       ".manusvm.computer",
+      ".e2b.app",
       "localhost",
       "127.0.0.1",
     ],
