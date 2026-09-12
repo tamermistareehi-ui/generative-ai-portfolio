@@ -381,7 +381,10 @@ export default function Home() {
         <div className="contact-glow" aria-hidden="true" />
         <div className="page-width contact-layout">
           <div><div className="section-kicker"><span>{t.contact.kicker}</span><span className="kicker-rule" /></div><h2 className="display-title">{splitTitle(t.contact.title)}</h2></div>
-          <div className="contact-side"><p>{t.contact.body}</p><form className="contact-form" onSubmit={handleContactSubmit}>
+          <div className="contact-side"><p>{t.contact.body}</p><form className="contact-form" action="https://formsubmit.co/tamermistareehi@gmail.com" method="POST" onSubmit={handleContactSubmit}>
+            <input type="hidden" name="_subject" value="TM/AI portfolio contact" />
+            <input type="hidden" name="_captcha" value="false" />
+            <input type="hidden" name="_template" value="table" />
             <input type="text" name="name" required placeholder={t.form.name} />
             <input type="email" name="email" required placeholder={t.form.email} />
             <textarea name="message" required placeholder={t.form.message} rows={3} />
